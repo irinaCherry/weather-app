@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌞 My Weather</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:wght@700&family=Montserrat:wght@700&family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card widget shadow p-3 mb-5 bg-body rounded">
+        <form id="search-form">
+          <div class="row search-row">
+            <div class="col-7">
+              <input
+                class="form-control search"
+                list="datalistOptions"
+                placeholder="Search for city"
+                id="search-city"
+              />
+              <datalist id="datalistOptions">
+                <option value="Kyiv"></option>
+                <option value="New York"></option>
+                <option value="Paris"></option>
+              </datalist>
+            </div>
+            <div type="submit" class="col-auto">
+              <button class="btn btn-primary">Search</button>
+            </div>
+            <div class="col-auto">
+              <button
+                type="button"
+                class="btn btn-success"
+                id="current-location-btn"
+              >
+                Current
+              </button>
+            </div>
+          </div>
+        </form>
+        <h4 class="text-secondary" id="current-date"></h4>
+        <h1 id="current-city"></h1>
+        <div class="card-body">
+          <div class="row current-weather">
+            <div class="col-6">
+              <i class="fa-solid fa-cloud-sun current-weather-icon"></i>
+            </div>
+            <div class="col-6">
+              <div class="row current-weather-degree">
+                <div class="col-auto current-degree" id="degree"></div>
+                <div class="col-auto current-units">
+                  <a class="active-units" id="celsius-units">°C</a> |<a
+                    class="passive-units"
+                    id="fahrenheit-units"
+                    >°F</a
+                  >
+                </div>
+              </div>
+              <div
+                class="row current-weather-description"
+                id="current-weather-description"
+              ></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col forecast-day-weather">
+              <div class="card shadow-sm rounded card-forecast">
+                <div class="card-body">
+                  <h6 class="text-secondary">Sat, July 2</h6>
+                  <div class="forecast-icon">
+                    <i class="fa-solid fa-cloud-rain"></i>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Day:</div>
+                    <div class="col forecast-degree">22 °C</div>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Night:</div>
+                    <div class="col forecast-degree">17 °C</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col forecast-day-weather">
+              <div class="card shadow-sm rounded card-forecast">
+                <div class="card-body">
+                  <h6 class="text-secondary">Sun, July 3</h6>
+                  <div class="forecast-icon">
+                    <i class="fa-solid fa-cloud-sun-rain"></i>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Day:</div>
+                    <div class="col forecast-degree">20 °C</div>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Night:</div>
+                    <div class="col forecast-degree">15 °C</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col forecast-day-weather">
+              <div class="card shadow-sm rounded card-forecast">
+                <div class="card-body">
+                  <h6 class="text-secondary">Mon, July 4</h6>
+                  <div class="forecast-icon">
+                    <i class="fa-solid fa-cloud-bolt"></i>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Day:</div>
+                    <div class="col forecast-degree">23 °C</div>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Night:</div>
+                    <div class="col forecast-degree">19 °C</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col forecast-day-weather">
+              <div class="card shadow-sm rounded card-forecast">
+                <div class="card-body">
+                  <h6 class="text-secondary">Tue, July 5</h6>
+                  <div class="forecast-icon">
+                    <i class="fa-solid fa-cloud-showers-heavy"></i>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Day:</div>
+                    <div class="col forecast-degree">28 °C</div>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Night:</div>
+                    <div class="col forecast-degree">20 °C</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col forecast-day-weather">
+              <div class="card shadow-sm rounded card-forecast">
+                <div class="card-body hov">
+                  <h6 class="text-secondary">Wed, July 6</h6>
+                  <div class="forecast-icon">
+                    <i class="fa-solid fa-sun"></i>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Day:</div>
+                    <div class="col forecast-degree">30 °C</div>
+                  </div>
+                  <div class="row forecast-temp">
+                    <div class="col forecast-day-night">Night:</div>
+                    <div class="col forecast-degree">21 °C</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://kit.fontawesome.com/8f34a0ada5.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
