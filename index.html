@@ -25,8 +25,15 @@
       <div class="card widget shadow p-3 bg-body rounded">
         <form id="search-form">
           <div class="row search-row">
-            <div class="col-7">
+            <div class="col-1">
+              <i
+                class="fa-solid fa-magnifying-glass-location w-100 current-location"
+                id="current-location-btn"
+              ></i>
+            </div>
+            <div class="col-8">
               <input
+                type="search"
                 class="form-control search"
                 list="datalistOptions"
                 placeholder="Search for city"
@@ -38,23 +45,34 @@
                 <option value="Paris"></option>
               </datalist>
             </div>
-            <div type="submit" class="col-auto">
-              <button class="btn btn-primary">Search</button>
-            </div>
-            <div class="col-auto">
-              <button
-                type="button"
-                class="btn btn-success"
-                id="current-location-btn"
-              >
-                Current
-              </button>
+
+            <div type="submit" class="col-3">
+              <input
+                type="submit"
+                class="btn btn-primary w-100 search-button"
+                value="Search"
+              />
             </div>
           </div>
         </form>
-        <h4 class="text-secondary" id="current-date"></h4>
-        <h1 id="current-city"></h1>
+
         <div class="card-body">
+          <h4 class="text-secondary" id="current-date"></h4>
+          <h1 id="current-city"></h1>
+          <div class="row">
+            <div class="col-6">
+              <h4
+                class="text-secondary current-weather-description"
+                id="current-weather-description"
+              ></h4>
+            </div>
+            <div class="col-6">
+              <ul class="text-secondary humidity-wind">
+                <li>Humidity: <span id="humidity"></span> %</li>
+                <li>Wind: <span id="wind"></span> km/h</li>
+              </ul>
+            </div>
+          </div>
           <div class="row current-weather">
             <div class="col-6">
               <i class="fa-solid current-weather-icon" id="weather-icon"></i>
@@ -70,10 +88,7 @@
                   >
                 </div>
               </div>
-              <div
-                class="row current-weather-description"
-                id="current-weather-description"
-              ></div>
+              <div class="row current-weather-description"></div>
             </div>
           </div>
           <div class="row">

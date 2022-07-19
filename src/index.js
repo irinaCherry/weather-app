@@ -76,15 +76,21 @@ function updateWeatherIcon(iconId) {
 }
 
 function updateCurrentTemperature(response) {
-  let temperature = Math.round(response.data.main.temp);
+  degree = Math.round(response.data.main.temp);
   document.querySelector(
     "#current-city"
   ).innerHTML = `${response.data.name}, ${response.data.sys.country}`;
   document.querySelector(
     "#current-weather-description"
   ).innerHTML = `${response.data.weather[0].description}`;
+  document.querySelector(
+    "#humidity"
+  ).innerHTML = `${response.data.main.humidity}`;
+  document.querySelector("#wind").innerHTML = `${Math.round(
+    response.data.wind.speed
+  )}`;
   document.querySelector("#search-city").value = "";
-  document.querySelector("#degree").innerHTML = temperature;
+  document.querySelector("#degree").innerHTML = degree;
   updateWeatherIcon(response.data.weather[0].icon);
 }
 
@@ -113,11 +119,13 @@ function findWeatherByCity(event) {
 function updateTemperatureToFahrenheit() {
   fahrenheitUnits.classList.replace("passive-units", "active-units");
   celsiusUnits.classList.replace("active-units", "passive-units");
-  degree.innerHTML = Math.round((degree.innerHTML * 9) / 5 + 32);
+  document.querySelector("#degree").innerHTML = Math.round(
+    (degree * 9) / 5 + 32
+  );
 }
 
 function updateTemperatureToCelsius() {
-  degree.innerHTML = Math.round(((degree.innerHTML - 32) * 5) / 9);
+  document.querySelector("#degree").innerHTML = degree;
   celsiusUnits.classList.replace("passive-units", "active-units");
   fahrenheitUnits.classList.replace("active-units", "passive-units");
 }
@@ -129,7 +137,8 @@ currentDateElement.innerHTML = getCurrentDay(currentDate);
 let searchForm = document.querySelector("#search-form");
 searchForm.addEventListener("submit", findWeatherByCity);
 
-let degree = document.querySelector("#degree");
+let degree = null;
+
 let celsiusUnits = document.querySelector("#celsius-units");
 let fahrenheitUnits = document.querySelector("#fahrenheit-units");
 fahrenheitUnits.addEventListener("click", updateTemperatureToFahrenheit);
@@ -137,4 +146,4 @@ celsiusUnits.addEventListener("click", updateTemperatureToCelsius);
 
 let currentWeather = document.querySelector("#current-location-btn");
 currentWeather.addEventListener("click", startCalculationCoordinates);
-startCalculationCoordinates();
+// startCalculationCoordinates();

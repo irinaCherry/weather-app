@@ -1,13 +1,11 @@
 h1 {
   font-family: "Montserrat", sans-serif;
   color: #5b7db1;
-  padding-left: 10px;
+  padding: 16px 0;
   text-transform: capitalize;
 }
 h4 {
   font-size: 16px;
-  margin-bottom: 16px;
-  padding-left: 10px;
 }
 h6 {
   font-size: 14px;
@@ -22,7 +20,22 @@ h6 {
 
 .search-row {
   line-height: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
+  padding: 12px;
+}
+
+.search-button {
+  background-color: #5b7db1;
+  border-color: #5b7db1;
+}
+
+.current-location {
+  font-size: 24px;
+  color: #5b7db1;
+  text-align: center;
+  padding: 6px 0px;
+  cursor: pointer;
+  text-shadow: 1px 1px 2px #61a4bc;
 }
 
 .widget {
@@ -39,6 +52,13 @@ h6 {
   transition: all 0.4s ease-out;
 }
 
+.humidity-wind {
+  list-style-type: none;
+  padding: 0;
+  line-height: 19px;
+  font-weight: 500;
+}
+
 .current-weather-icon {
   font-size: 64px;
   color: #61a4bc;
@@ -50,6 +70,7 @@ h6 {
   color: #1a132f;
   opacity: 80%;
   overflow-wrap: normal;
+  line-height: 64px;
 }
 
 .current-units {
@@ -80,9 +101,9 @@ h6 {
 }
 
 .current-weather-description {
-  color: #61a4bc;
-  font-weight: 500;
-  padding: 12px;
+  /* color: #61a4bc; */
+  /* font-weight: 500; */
+  padding: 0;
   text-transform: capitalize;
 }
 
