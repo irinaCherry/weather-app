@@ -1,32 +1,22 @@
-function getCurrentDay(fullDate) {
-  let dayOfWeek = fullDate.getDay();
-  let month = fullDate.getMonth();
-  let day = fullDate.getDate();
-  let localtime = fullDate.toLocaleTimeString("en-GB");
-  let days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  let months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  return `${days[dayOfWeek]}, ${months[month]} ${day}, ${localtime}`;
+function formatDate(date, type) {
+  let options = {};
+  if (type == 1) {
+    options = {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    };
+  } else {
+    options = {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    };
+  }
+  return date.toLocaleString("en-US", options);
 }
 
 function updateWeatherIcon(iconId, element) {
@@ -79,15 +69,20 @@ function showForecast(response) {
   let forecastSection = document.querySelector("#forecast-section");
   let forecastHTML = `<div class="row">`;
   forecastData.forEach(function (forecastDayData, index) {
-    let dayTemp = Math.round(forecastDayData.temp.eve);
-    let nightTemp = Math.round(forecastDayData.temp.min);
-    let forecastIconId = forecastDayData.weather[0].icon;
-    forecastHTML =
-      forecastHTML +
-      `<div class="col forecast-day-weather">
+    if (index < 5) {
+      let dayTemp = Math.round(forecastDayData.temp.eve);
+      let nightTemp = Math.round(forecastDayData.temp.min);
+      let forecastIconId = forecastDayData.weather[0].icon;
+      let forecastDay = new Date(forecastDayData.dt * 1000);
+      forecastHTML =
+        forecastHTML +
+        `<div class="col forecast-day-weather">
                 <div class="card shadow-sm rounded card-forecast">
                   <div class="card-body">
-                    <h6 class="text-secondary">${forecastDayData.dt}</h6>
+                    <h6 class="text-secondary">${formatDate(
+                      forecastDay,
+                      1
+                    )}</h6>
                     <div class="icon-block">
                       <i class="fa-solid forecast-icon" id = "forecast-icon-${index}"></i>
                     </div>  
@@ -102,7 +97,8 @@ function showForecast(response) {
                   </div>
                 </div>
               </div>`;
-    forecastIcons.push(forecastIconId);
+      forecastIcons.push(forecastIconId);
+    }
   });
   forecastHTML = forecastHTML + `</div>`;
   forecastSection.innerHTML = forecastHTML;
@@ -186,9 +182,8 @@ function findWeatherByCity(city) {
 }
 
 let apiKey = "409663116819999f86eb04964bec2384";
-let currentDate = new Date();
 let currentDateElement = document.querySelector("#current-date");
-currentDateElement.innerHTML = getCurrentDay(currentDate);
+currentDateElement.innerHTML = formatDate(new Date(), 0);
 
 let searchForm = document.querySelector("#search-form");
 searchForm.addEventListener("submit", searchForWeather);
