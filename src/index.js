@@ -75,6 +75,42 @@ function updateWeatherIcon(iconId) {
   }
 }
 
+function showForecast() {
+  let forecastSection = document.querySelector("#forecast-section");
+  let forecastHTML = `<div class="row">`;
+  let forecastDays = [
+    "Sat, July 2",
+    "Sun, July 3",
+    "Mon, July 4",
+    "Tue, July 5",
+    "Wed, July 6",
+  ];
+  forecastDays.forEach(function (day) {
+    forecastHTML =
+      forecastHTML +
+      `<div class="col forecast-day-weather">
+                <div class="card shadow-sm rounded card-forecast">
+                  <div class="card-body">
+                    <h6 class="text-secondary">${day}</h6>
+                    <div class="forecast-icon">
+                      <i class="fa-solid fa-cloud-rain"></i>
+                    </div>
+                    <div class="row forecast-temp">
+                      <div class="col forecast-day-night">Day:</div>
+                      <div class="col forecast-degree">22 °C</div>
+                    </div>
+                    <div class="row forecast-temp">
+                      <div class="col forecast-day-night">Night:</div>
+                      <div class="col forecast-degree">17 °C</div>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+  });
+  forecastHTML = forecastHTML + `</div>`;
+  forecastSection.innerHTML = forecastHTML;
+}
+
 function updateCurrentTemperature(response) {
   degree = Math.round(response.data.main.temp);
   document.querySelector(
@@ -96,6 +132,7 @@ function updateCurrentTemperature(response) {
     updateTemperatureToFahrenheit();
   }
   updateWeatherIcon(response.data.weather[0].icon);
+  showForecast();
 }
 
 function findWeatherByCoordinates(position) {
