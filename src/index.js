@@ -29,116 +29,127 @@ function getCurrentDay(fullDate) {
   return `${days[dayOfWeek]}, ${months[month]} ${day}, ${localtime}`;
 }
 
-function updateWeatherIcon(iconId) {
-  let weatherIconElement = document.querySelector("#weather-icon");
+function updateWeatherIcon(iconId, element) {
   if (iconId === "01n") {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-moon");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-moon");
   } else if (iconId === "01d") {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-sun");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-sun");
   } else if (iconId === "02d") {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-cloud-sun");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-cloud-sun");
   } else if (iconId === "02n") {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-cloud-moon");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-cloud-moon");
   } else if (
     (iconId === "03d") |
     (iconId === "03n") |
     (iconId === "04d") |
     (iconId === "04n")
   ) {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-cloud");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-cloud");
   } else if ((iconId === "09d") | (iconId === "09n")) {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-cloud-showers-heavy");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-cloud-showers-heavy");
   } else if (iconId === "10d") {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-cloud-sun-rain");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-cloud-sun-rain");
   } else if (iconId === "10n") {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-cloud-moon-rain");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-cloud-moon-rain");
   } else if ((iconId === "11d") | (iconId === "11n")) {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-cloud-bolt");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-cloud-bolt");
   } else if ((iconId === "13d") | (iconId === "13n")) {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-snowflake");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-snowflake");
   } else if ((iconId === "50d") | (iconId === "50n")) {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-smog");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-smog");
   } else {
-    weatherIconElement.classList.remove(weatherIconElement.classList.item(2));
-    weatherIconElement.classList.add("fa-hurricane");
+    element.classList.remove(element.classList.item(2));
+    element.classList.add("fa-hurricane");
   }
 }
 
-function showForecast() {
+function showForecast(response) {
+  let forecastData = response.data.daily;
   let forecastSection = document.querySelector("#forecast-section");
   let forecastHTML = `<div class="row">`;
-  let forecastDays = [
-    "Sat, July 2",
-    "Sun, July 3",
-    "Mon, July 4",
-    "Tue, July 5",
-    "Wed, July 6",
-  ];
-  forecastDays.forEach(function (day) {
+  forecastData.forEach(function (forecastDayData, index) {
+    let dayTemp = Math.round(forecastDayData.temp.eve);
+    let nightTemp = Math.round(forecastDayData.temp.min);
+    let forecastIconId = forecastDayData.weather[0].icon;
     forecastHTML =
       forecastHTML +
       `<div class="col forecast-day-weather">
                 <div class="card shadow-sm rounded card-forecast">
                   <div class="card-body">
-                    <h6 class="text-secondary">${day}</h6>
-                    <div class="forecast-icon">
-                      <i class="fa-solid fa-cloud-rain"></i>
-                    </div>
+                    <h6 class="text-secondary">${forecastDayData.dt}</h6>
+                    <div class="icon-block">
+                      <i class="fa-solid forecast-icon" id = "forecast-icon-${index}"></i>
+                    </div>  
                     <div class="row forecast-temp">
                       <div class="col forecast-day-night">Day:</div>
-                      <div class="col forecast-degree">22 °C</div>
+                      <div class="col forecast-degree">${dayTemp} °C</div>
                     </div>
                     <div class="row forecast-temp">
                       <div class="col forecast-day-night">Night:</div>
-                      <div class="col forecast-degree">17 °C</div>
+                      <div class="col forecast-degree">${nightTemp} °C</div>
                     </div>
                   </div>
                 </div>
               </div>`;
+    forecastIcons.push(forecastIconId);
   });
   forecastHTML = forecastHTML + `</div>`;
   forecastSection.innerHTML = forecastHTML;
+  forecastIcons.forEach(function (icon, index) {
+    let iconId = icon;
+    let elementId = document.querySelector(`#forecast-icon-${index}`);
+    updateWeatherIcon(iconId, elementId);
+  });
+}
+
+function requestForecastData(coords) {
+  let latitude = coords.lat;
+  let longitude = coords.lon;
+  let apiUrl = "https://api.openweathermap.org/data/2.5/onecall";
+  let endPoint = `${apiUrl}?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+  axios.get(endPoint).then(showForecast);
 }
 
 function updateCurrentTemperature(response) {
-  degree = Math.round(response.data.main.temp);
-  document.querySelector(
-    "#current-city"
-  ).innerHTML = `${response.data.name}, ${response.data.sys.country}`;
-  document.querySelector(
+  let coordinates = response.data.coord;
+  let city = document.querySelector("#current-city");
+  let weatherDescription = document.querySelector(
     "#current-weather-description"
-  ).innerHTML = `${response.data.weather[0].description}`;
-  document.querySelector(
-    "#humidity"
-  ).innerHTML = `${response.data.main.humidity}`;
-  document.querySelector("#wind").innerHTML = `${Math.round(
-    response.data.wind.speed
-  )}`;
+  );
+  let humidity = document.querySelector("#humidity");
+  let wind = document.querySelector("#wind");
+  let weatherIconElement = document.querySelector("#weather-icon");
+  let iconId = response.data.weather[0].icon;
+  forecastIcons = [];
+  degree = Math.round(response.data.main.temp);
+  city.innerHTML = `${response.data.name}, ${response.data.sys.country}`;
+  weatherDescription.innerHTML = `${response.data.weather[0].description}`;
+  humidity.innerHTML = `${response.data.main.humidity}`;
+  wind.innerHTML = `${Math.round(response.data.wind.speed)}`;
   document.querySelector("#search-city").value = "";
   if (celsiusUnits.classList.contains("active-units")) {
     updateTemperatureToCelsius();
   } else {
     updateTemperatureToFahrenheit();
   }
-  updateWeatherIcon(response.data.weather[0].icon);
-  showForecast();
+  updateWeatherIcon(iconId, weatherIconElement);
+  requestForecastData(coordinates);
 }
 
 function findWeatherByCoordinates(position) {
   let latitude = position.coords.latitude;
   let longitude = position.coords.longitude;
-  let apiKey = "409663116819999f86eb04964bec2384";
   let apiUrl = "https://api.openweathermap.org/data/2.5/weather";
   let endPoint = `${apiUrl}?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
   axios.get(endPoint).then(updateCurrentTemperature);
@@ -146,13 +157,6 @@ function findWeatherByCoordinates(position) {
 
 function startCalculationCoordinates() {
   navigator.geolocation.getCurrentPosition(findWeatherByCoordinates);
-}
-
-function findWeatherByCity(city) {
-  let apiKey = "409663116819999f86eb04964bec2384";
-  let apiUrl = "https://api.openweathermap.org/data/2.5/weather";
-  let endPoint = `${apiUrl}?q=${city}&appid=${apiKey}&units=metric`;
-  axios.get(endPoint).then(updateCurrentTemperature);
 }
 
 function searchForWeather(event) {
@@ -175,6 +179,13 @@ function updateTemperatureToCelsius() {
   fahrenheitUnits.classList.replace("active-units", "passive-units");
 }
 
+function findWeatherByCity(city) {
+  let apiUrl = "https://api.openweathermap.org/data/2.5/weather";
+  let endPoint = `${apiUrl}?q=${city}&appid=${apiKey}&units=metric`;
+  axios.get(endPoint).then(updateCurrentTemperature);
+}
+
+let apiKey = "409663116819999f86eb04964bec2384";
 let currentDate = new Date();
 let currentDateElement = document.querySelector("#current-date");
 currentDateElement.innerHTML = getCurrentDay(currentDate);
@@ -183,6 +194,7 @@ let searchForm = document.querySelector("#search-form");
 searchForm.addEventListener("submit", searchForWeather);
 
 let degree = null;
+let forecastIcons = [];
 
 let celsiusUnits = document.querySelector("#celsius-units");
 let fahrenheitUnits = document.querySelector("#fahrenheit-units");

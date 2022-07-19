@@ -111,10 +111,13 @@ h6 {
   margin-bottom: 40px;
 }
 
+.icon-block {
+  text-align: center;
+}
+
 .forecast-icon {
   font-size: 35px;
   color: #61a4bc;
-  text-align: center;
   padding: 10px;
 }
 
