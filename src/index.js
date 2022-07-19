@@ -146,4 +146,4 @@ celsiusUnits.addEventListener("click", updateTemperatureToCelsius);
 
 let currentWeather = document.querySelector("#current-location-btn");
 currentWeather.addEventListener("click", startCalculationCoordinates);
-// startCalculationCoordinates();
+startCalculationCoordinates();
