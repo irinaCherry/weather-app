@@ -90,7 +90,11 @@ function updateCurrentTemperature(response) {
     response.data.wind.speed
   )}`;
   document.querySelector("#search-city").value = "";
-  document.querySelector("#degree").innerHTML = degree;
+  if (celsiusUnits.classList.contains("active-units")) {
+    updateTemperatureToCelsius();
+  } else {
+    updateTemperatureToFahrenheit();
+  }
   updateWeatherIcon(response.data.weather[0].icon);
 }
 
@@ -107,13 +111,17 @@ function startCalculationCoordinates() {
   navigator.geolocation.getCurrentPosition(findWeatherByCoordinates);
 }
 
-function findWeatherByCity(event) {
-  event.preventDefault();
-  let searchCity = document.querySelector("#search-city");
+function findWeatherByCity(city) {
   let apiKey = "409663116819999f86eb04964bec2384";
   let apiUrl = "https://api.openweathermap.org/data/2.5/weather";
-  let endPoint = `${apiUrl}?q=${searchCity.value}&appid=${apiKey}&units=metric`;
+  let endPoint = `${apiUrl}?q=${city}&appid=${apiKey}&units=metric`;
   axios.get(endPoint).then(updateCurrentTemperature);
+}
+
+function searchForWeather(event) {
+  event.preventDefault();
+  let searchCity = document.querySelector("#search-city");
+  findWeatherByCity(searchCity.value);
 }
 
 function updateTemperatureToFahrenheit() {
@@ -135,7 +143,7 @@ let currentDateElement = document.querySelector("#current-date");
 currentDateElement.innerHTML = getCurrentDay(currentDate);
 
 let searchForm = document.querySelector("#search-form");
-searchForm.addEventListener("submit", findWeatherByCity);
+searchForm.addEventListener("submit", searchForWeather);
 
 let degree = null;
 
@@ -146,4 +154,4 @@ celsiusUnits.addEventListener("click", updateTemperatureToCelsius);
 
 let currentWeather = document.querySelector("#current-location-btn");
 currentWeather.addEventListener("click", startCalculationCoordinates);
-startCalculationCoordinates();
+findWeatherByCity("Kyiv");
