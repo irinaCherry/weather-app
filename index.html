@@ -40,9 +40,9 @@
                 id="search-city"
               />
               <datalist id="datalistOptions">
-                <option value="Kyiv"></option>
-                <option value="New York"></option>
-                <option value="Paris"></option>
+                <option value="Kosice"></option>
+                <option value="Krakow"></option>
+                <option value="Amsterdam"></option>
               </datalist>
             </div>
 
@@ -69,7 +69,9 @@
             <div class="col-6">
               <ul class="text-secondary humidity-wind">
                 <li>Humidity: <span id="humidity"></span> %</li>
-                <li>Wind: <span id="wind"></span> m/sec</li>
+                <li>
+                  Wind: <span id="wind"></span><span id="wind-units"></span>
+                </li>
               </ul>
             </div>
           </div>
@@ -81,11 +83,9 @@
               <div class="row current-weather-degree">
                 <div class="col-auto current-degree" id="degree"></div>
                 <div class="col-auto current-units">
-                  <a class="active-units" id="celsius-units">°C</a> |<a
-                    class="passive-units"
-                    id="fahrenheit-units"
-                    >°F</a
-                  >
+                  <a class="active-units" id="celsius-units">°C</a
+                  ><span class="dash"> | </span
+                  ><a class="passive-units" id="fahrenheit-units">°F</a>
                 </div>
               </div>
             </div>

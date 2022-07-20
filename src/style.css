@@ -76,8 +76,15 @@ small a {
   line-height: 64px;
 }
 
+.dash {
+  vertical-align: top;
+  color: #6c757d;
+  opacity: 70%;
+}
+
 .current-units {
   padding: 0;
+  font-size: 30px;
 }
 
 .passive-units {
@@ -86,10 +93,13 @@ small a {
   color: #6c757d;
   cursor: pointer;
   opacity: 70%;
+  font-size: 30px;
 }
 
 .passive-units:hover {
   color: #61a4bc;
+  font-size: 40px;
+  opacity: 90%;
 }
 
 .active-units {
@@ -97,6 +107,7 @@ small a {
   text-decoration: none;
   color: #1a132f;
   opacity: 100%;
+  font-size: 40px;
 }
 
 .active-units:hover {

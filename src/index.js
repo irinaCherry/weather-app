@@ -68,9 +68,14 @@ function showForecast(response) {
   let forecastData = response.data.daily;
   let forecastSection = document.querySelector("#forecast-section");
   let forecastHTML = `<div class="row">`;
+  if (units == "metric") {
+    tempUnits = "°C";
+  } else {
+    tempUnits = "°F";
+  }
   forecastData.forEach(function (forecastDayData, index) {
     if (index < 5) {
-      let dayTemp = Math.round(forecastDayData.temp.eve);
+      let dayTemp = Math.round(forecastDayData.temp.max);
       let nightTemp = Math.round(forecastDayData.temp.min);
       let forecastIconId = forecastDayData.weather[0].icon;
       let forecastDay = new Date(forecastDayData.dt * 1000);
@@ -88,11 +93,11 @@ function showForecast(response) {
                     </div>  
                     <div class="row forecast-temp">
                       <div class="col forecast-day-night">Day:</div>
-                      <div class="col forecast-degree">${dayTemp} °C</div>
+                      <div class="col forecast-degree">${dayTemp} ${tempUnits}</div>
                     </div>
                     <div class="row forecast-temp">
                       <div class="col forecast-day-night">Night:</div>
-                      <div class="col forecast-degree">${nightTemp} °C</div>
+                      <div class="col forecast-degree">${nightTemp} ${tempUnits}</div>
                     </div>
                   </div>
                 </div>
@@ -125,12 +130,14 @@ function requestForecastData(coords, units) {
 function updateTemperatureToFahrenheit() {
   fahrenheitUnits.classList.replace("passive-units", "active-units");
   celsiusUnits.classList.replace("active-units", "passive-units");
+  windUnits.innerHTML = " miles/hour";
   requestForecastData(coordinates, "imperial");
 }
 
 function updateTemperatureToCelsius() {
   celsiusUnits.classList.replace("passive-units", "active-units");
   fahrenheitUnits.classList.replace("active-units", "passive-units");
+  windUnits.innerHTML = " meter/sec";
   requestForecastData(coordinates, "metric");
 }
 
@@ -208,6 +215,7 @@ let coordinates = {};
 let units = "metric";
 let celsiusUnits = document.querySelector("#celsius-units");
 let fahrenheitUnits = document.querySelector("#fahrenheit-units");
+let windUnits = document.querySelector("#wind-units");
 fahrenheitUnits.addEventListener("click", requestTempUpdateToFarenheit);
 celsiusUnits.addEventListener("click", requestTempUpdateToCelsius);
 
