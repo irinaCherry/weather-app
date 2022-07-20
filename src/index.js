@@ -103,23 +103,41 @@ function showForecast(response) {
   forecastHTML = forecastHTML + `</div>`;
   forecastSection.innerHTML = forecastHTML;
   forecastIcons.forEach(function (icon, index) {
-    let iconId = icon;
     let elementId = document.querySelector(`#forecast-icon-${index}`);
-    updateWeatherIcon(iconId, elementId);
+    updateWeatherIcon(icon, elementId);
   });
 }
 
-function requestForecastData(coords) {
+function requestForecastData(coords, units) {
   let latitude = coords.lat;
   let longitude = coords.lon;
   let apiUrl = "https://api.openweathermap.org/data/2.5/onecall";
-  let endPoint = `${apiUrl}?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+  let endPoint = "";
+  forecastIcons = [];
+  if (units == "metric") {
+    endPoint = `${apiUrl}?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+  } else {
+    endPoint = `${apiUrl}?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=imperial`;
+  }
   axios.get(endPoint).then(showForecast);
 }
 
+function updateTemperatureToFahrenheit() {
+  fahrenheitUnits.classList.replace("passive-units", "active-units");
+  celsiusUnits.classList.replace("active-units", "passive-units");
+  requestForecastData(coordinates, "imperial");
+}
+
+function updateTemperatureToCelsius() {
+  celsiusUnits.classList.replace("passive-units", "active-units");
+  fahrenheitUnits.classList.replace("active-units", "passive-units");
+  requestForecastData(coordinates, "metric");
+}
+
 function updateCurrentTemperature(response) {
-  let coordinates = response.data.coord;
-  let city = document.querySelector("#current-city");
+  coordinates = response.data.coord;
+  city = response.data.name;
+  let cityHeading = document.querySelector("#current-city");
   let weatherDescription = document.querySelector(
     "#current-weather-description"
   );
@@ -127,20 +145,20 @@ function updateCurrentTemperature(response) {
   let wind = document.querySelector("#wind");
   let weatherIconElement = document.querySelector("#weather-icon");
   let iconId = response.data.weather[0].icon;
-  forecastIcons = [];
+  let temperature = document.querySelector("#degree");
   degree = Math.round(response.data.main.temp);
-  city.innerHTML = `${response.data.name}, ${response.data.sys.country}`;
+  cityHeading.innerHTML = `${response.data.name}, ${response.data.sys.country}`;
   weatherDescription.innerHTML = `${response.data.weather[0].description}`;
   humidity.innerHTML = `${response.data.main.humidity}`;
   wind.innerHTML = `${Math.round(response.data.wind.speed)}`;
   document.querySelector("#search-city").value = "";
-  if (celsiusUnits.classList.contains("active-units")) {
+  temperature.innerHTML = degree;
+  if (units == "metric") {
     updateTemperatureToCelsius();
   } else {
     updateTemperatureToFahrenheit();
   }
   updateWeatherIcon(iconId, weatherIconElement);
-  requestForecastData(coordinates);
 }
 
 function findWeatherByCoordinates(position) {
@@ -161,24 +179,20 @@ function searchForWeather(event) {
   findWeatherByCity(searchCity.value);
 }
 
-function updateTemperatureToFahrenheit() {
-  fahrenheitUnits.classList.replace("passive-units", "active-units");
-  celsiusUnits.classList.replace("active-units", "passive-units");
-  document.querySelector("#degree").innerHTML = Math.round(
-    (degree * 9) / 5 + 32
-  );
-}
-
-function updateTemperatureToCelsius() {
-  document.querySelector("#degree").innerHTML = degree;
-  celsiusUnits.classList.replace("passive-units", "active-units");
-  fahrenheitUnits.classList.replace("active-units", "passive-units");
-}
-
 function findWeatherByCity(city) {
   let apiUrl = "https://api.openweathermap.org/data/2.5/weather";
-  let endPoint = `${apiUrl}?q=${city}&appid=${apiKey}&units=metric`;
+  let endPoint = `${apiUrl}?q=${city}&appid=${apiKey}&units=${units}`;
   axios.get(endPoint).then(updateCurrentTemperature);
+}
+
+function requestTempUpdateToFarenheit() {
+  units = "imperial";
+  findWeatherByCity(city);
+}
+
+function requestTempUpdateToCelsius() {
+  units = "metric";
+  findWeatherByCity(city);
 }
 
 let apiKey = "409663116819999f86eb04964bec2384";
@@ -187,15 +201,16 @@ currentDateElement.innerHTML = formatDate(new Date(), 0);
 
 let searchForm = document.querySelector("#search-form");
 searchForm.addEventListener("submit", searchForWeather);
-
+let city = "Kyiv";
 let degree = null;
 let forecastIcons = [];
-
+let coordinates = {};
+let units = "metric";
 let celsiusUnits = document.querySelector("#celsius-units");
 let fahrenheitUnits = document.querySelector("#fahrenheit-units");
-fahrenheitUnits.addEventListener("click", updateTemperatureToFahrenheit);
-celsiusUnits.addEventListener("click", updateTemperatureToCelsius);
+fahrenheitUnits.addEventListener("click", requestTempUpdateToFarenheit);
+celsiusUnits.addEventListener("click", requestTempUpdateToCelsius);
 
 let currentWeather = document.querySelector("#current-location-btn");
 currentWeather.addEventListener("click", startCalculationCoordinates);
-findWeatherByCity("Kyiv");
+findWeatherByCity(city);

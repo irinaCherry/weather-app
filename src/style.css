@@ -1,7 +1,7 @@
 h1 {
   font-family: "Montserrat", sans-serif;
   color: #5b7db1;
-  padding: 16px 0;
+  padding: 8px 0;
   text-transform: capitalize;
 }
 h4 {
@@ -12,6 +12,9 @@ h6 {
   text-align: center;
 }
 
+small a {
+  color: #5b7db1;
+}
 .search {
   margin-bottom: 10px;
   color: #1a132f;
@@ -20,7 +23,7 @@ h6 {
 
 .search-row {
   line-height: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   padding: 12px;
 }
 
